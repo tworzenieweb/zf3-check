@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="symfony.finder" class="Symfony\Component\Finder\Finder">
+            <factory class="Symfony\Component\Finder\Finder" method="create" />
+        </service>
+
+        <service id="gnugat.editor" class="Gnugat\Redaktilo\Editor">
+            <factory class="Gnugat\Redaktilo\EditorFactory" method="createEditor" />
+        </service>
+
+        <service id="service.finder" class="Tworzenieweb\Zf3Check\Service\Finder">
+            <argument type="service" id="symfony.finder" />
+        </service>
+
+        <service id="service.writer" class="Tworzenieweb\Zf3Check\Service\Writer">
+            <argument type="service" id="gnugat.editor" />
+        </service>
+
+        <service id="service.writer.factory_upgrade" class="Tworzenieweb\Zf3Check\Service\Writer\FactoryUpgrade">
+            <tag name="writer_strategy"/>
+        </service>
+
+        <service id="service.writer.delegator_factory_upgrade" class="Tworzenieweb\Zf3Check\Service\Writer\DelegatorFactoryUpgrade">
+            <tag name="writer_strategy"/>
+        </service>
+
+        <service id="service.migrator" class="Tworzenieweb\Zf3Check\Service\Migrator">
+            <argument type="service" id="service.finder"/>
+            <argument type="service" id="service.writer"/>
+        </service>
+
+        <service id="command.provision" class="Tworzenieweb\Zf3Check\Command\CheckCommand">
+            <argument type="string">check</argument>
+            <call method="setMigrator">
+                <argument type="service" id="service.migrator"/>
+            </call>
+            <tag name="console.command"/>
+        </service>
+    </services>
+</container>

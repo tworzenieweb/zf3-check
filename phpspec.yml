@@ -1,0 +1,15 @@
+suites:
+    sql_provisioner:
+        namespace: Tworzenieweb\Zf3Check
+        psr4_prefix: Tworzenieweb\Zf3Check
+
+extensions:
+  Memio\SpecGen\MemioSpecGenExtension: ~
+  PhpSpecCodeCoverage\CodeCoverageExtension: ~
+code_coverage:
+  whitelist:
+    - src
+  format:
+    - clover
+  output:
+    clover: coverage.clover

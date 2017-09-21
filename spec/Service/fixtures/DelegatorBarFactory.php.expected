@@ -1,0 +1,65 @@
+<?php
+
+// this is not a real class only for a purpose of testing
+
+namespace Foo;
+
+use Interop\Container\ContainerInterface;
+use Interop\Container\Exception\ContainerException;
+use Zend\ServiceManager\Exception\ServiceNotCreatedException;
+use Zend\ServiceManager\Exception\ServiceNotFoundException;
+
+
+class DelegatorBarFactory implements FactoryInterface {
+
+
+
+    /**
+     * A factory that creates delegates of a given service
+     *
+     * @param  ContainerInterface $container
+     * @param  string $name
+     * @param  callable $callback
+     * @param  null|array $options
+     * @return object
+     * @throws ServiceNotFoundException if unable to resolve the service.
+     * @throws ServiceNotCreatedException if an exception is raised when
+     *     creating a service.
+     * @throws ContainerException if any other error occurs
+     */
+    public function __invoke(ContainerInterface $container, $name, callable $callback, array $options = null)
+    {
+        return $this->createDelegatorWithName($container, $name, $name, $callback);
+    }
+
+
+
+    /**
+     * A factory that creates delegates of a given service
+     *
+     * @param ServiceLocatorInterface $serviceLocator the service locator which requested the service
+     * @param string $name the normalized service name
+     * @param string $requestedName the requested service name
+     * @param callable $callback the callback that is responsible for creating the service
+     *
+     * @return mixed
+     */
+    public function createDelegatorWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName, $callback)
+    {
+        /** @var RouteStackInterface $router */
+        $router = $callback();
+
+        if ($router instanceof TranslatorAwareTreeRouteStack) {
+            /** @var Translator $translator */
+            $translator = $serviceLocator->get('MvcTranslator');
+
+            if ($translator->getLocale() === Locale::ACH_UG) {
+                $translator = new Translator();
+            }
+
+            $router->setTranslator($translator);
+        }
+
+        return $router;
+    }
+}

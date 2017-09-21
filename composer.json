@@ -1,0 +1,34 @@
+{
+  "name": "tworzenieweb/zf3-check",
+  "description": "Check if your project is ready for ZF3.",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Luke Adamczewski",
+      "email": "tworzenieweb@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.0",
+    "symfony/console": "^3.2",
+    "symfony/dependency-injection": "^3.2",
+    "symfony/config": "^3.2",
+    "symfony/finder": "^3.2",
+    "symfony/filesystem": "^3.2",
+    "symfony/process": "^3.2",
+    "gnugat/redaktilo": "^1.7"
+  },
+  "autoload": {
+    "psr-4": {"Tworzenieweb\\Zf3Check\\": "src/"}
+  },
+  "require-dev": {
+    "phpspec/phpspec": "^3.3",
+    "memio/spec-gen": "^0.6",
+    "bossa/phpspec2-expect": "^2.2",
+    "leaphub/phpcs-symfony2-standard": "~2.0.0",
+    "henrikbjorn/phpspec-code-coverage": "~3.0.0"
+  },
+  "minimum-stability": "dev",
+  "prefer-stable":  true,
+  "bin": ["bin/compatibility-check"]
+}
